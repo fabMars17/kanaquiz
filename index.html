@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="UTF-8">
+    <meta http-equiv="x-ua-compatible" content="IE=Edge">
+	<title>HiraKata Test</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+<style type="text/css" charset="utf-8">/* See license.txt for terms of usage */
+body {
+font-family: ubuntu, helvetica, arial;
+background-color:#f2f6f9;
+}
+
+#hexa01 {
+cursor: default;
+position:absolute;
+margin-left:-130px;
+left:50%;
+top:4%;
+box-shadow: 0px 0px 10px #888888;
+
+-webkit-user-select: none; /* Chrome/Safari */        
+-moz-user-select: none; /* Firefox */
+-ms-user-select: none; /* IE10+ */
+
+/* Rules below not implemented in browsers yet */
+-o-user-select: none;
+user-select: none;
+}
+
+#score {
+position:relative;
+text-align: center;
+top:20%;
+}
+
+#result {
+display:none;
+position: absolute;
+/*background-color: #FFFF00;*/
+width: 100%;
+height: 100%;
+top: 0;
+z-index: 10;
+opacity: 1;
+}
+
+#resultscreen {
+position: absolute;
+background-color: white;
+width: 100%;
+height: 100%;
+top: 0;
+opacity: 0.1;
+}
+
+#resultext {
+position:absolute;
+color: #aa2800;
+left:18%;
+top:40%;
+font-weight: bold;
+font-size: 4.2em;
+opacity:1;
+}
+
+#resultextfun {
+background: url("asset/logdiv.png") 0 0 no-repeat;
+background-position: 0px 0px;
+display:block;
+width: 200px;
+height: 80px;
+position:absolute;
+color: #aa2800;
+left:18%;
+top:40%;
+opacity:1;
+}
+
+#resultanim {
+background: url("asset/starfix.png"); /* for ie */
+position:absolute;
+width: 64px;
+height: 64px;
+left:10%;
+top:37%;
+}
+
+#subhexa01 {
+font-size: 2.2em;
+font-weight: bold;
+position: relative;
+color: white;
+width: 267px;
+height: 90px;
+background-color: #13b452;
+box-shadow: 0px 0px 10px #888888;
+z-index:1;
+}
+
+table {
+border-collapse: collapse;
+background-color: #2fbbbd;
+font-weight: bold;
+}
+
+tr {
+position:relative;
+}
+
+td {
+position:relative;
+height:50px;
+width:130px;
+color:white;
+border: 1px solid #ccc;
+text-align: center;
+
+
+}
+
+td:hover {
+color:white;
+cursor: pointer;
+background-color: #08878a;
+box-shadow: 0px 0px 5px #888888 inset;
+}
+
+#icomenu {
+/*background-color: #0a233a;*/
+left: -43px;
+position: relative;
+}
+
+#icomenu:hover >#selectmenu {
+display: block;
+}
+
+#icomenusound {
+background-color: #11343F;
+position: absolute;
+height: 45px;
+width: 45px;
+top:91px;
+left:-43.5px;
+z-index: 2;
+}
+
+#icosound {
+background: url("asset/icosound.png") 0 0 no-repeat;
+background-position: 0px 0px;
+height: 45px;
+width: 45px;
+position:absolute;
+}
+
+
+#icomenutext {
+background-color: #11343F;
+color: #FFFFFF;
+font-weight: bold;
+height: 30px;
+left: -23px;
+padding-top: 15px;
+position: absolute;
+text-align: center;
+top: 22px;
+transform: rotate(270deg);
+-webkit-transform: rotate(270deg);
+-moz-transform: rotate(270deg);
+-o-transform: rotate(270deg);
+width: 90px;
+z-index: 3;
+}
+
+#selectmenu{
+display: none;
+left: 43px;
+position:absolute;
+width:100%;
+z-index:2;
+
+}
+
+.triangle {
+width: 0px;
+height: 0px;
+border-style: solid;
+border-width: 15px 0 15px 25px;
+border-color: transparent transparent transparent #13B452;
+left: 0;
+margin-left: 50%;
+position: absolute;
+}
+
+.selectstyle {
+border-top: 1px solid #CCCCCC;
+color: #FFFFFF;
+font-size: 1em;
+font-weight: bold;
+height: 29px;
+}
+
+.selectstyle1 {
+background-color: #13B452;
+height: 25px;
+padding-top: 4px;
+position: absolute;
+text-align: center;
+width: 50%;
+}
+
+.selectstyle2 {
+background-color: #2FBBBD;
+height: 25px;
+margin-left: 50%;
+padding-top: 4px;
+position: absolute;
+text-align: center;
+width: 50%;
+}
+
+/********* media query **********/
+@media screen and (max-width: 768px) /*and (orientation:portrait)*/
+{	
+	body {
+	/*overflow: hidden;  this is important to prevent the whole page to bounce */
+	}
+	
+	td {
+	height:130px;
+	width:130px;
+	font-size: 4.2em;
+	}
+
+	#tableau {
+	position:relative;/*
+	margin-left:-68px;
+	left:50%;*/
+	}
+}
+
+</style>
+</head>
+
+<body>
+
+
+<div id="hexa01">
+	<div id="icomenu">
+	<span id="icomenutext">options</span>
+	
+		<div id="selectmenu">
+			<div id="katatoroma" class="selectstyle">
+				<span class="selectstyle1">katakana</span>
+				<span class="selectstyle2">romaji</span><span class="triangle"></span>
+			</div>
+			<div id="hiratoroma" class="selectstyle">
+				<span class="selectstyle1">hiragana</span>
+				<span class="selectstyle2">romaji</span><span class="triangle"></span>
+			</div>
+			<div id="hiratokata" class="selectstyle">
+				<span class="selectstyle1">hiragana</span>
+				<span class="selectstyle2">katakana</span><span class="triangle"></span>
+			</div>
+		</div>
+	</div>
+	<div id="icomenusound"><span id="icosound"></span></div>
+	<div id="subhexa01">
+		<div id="score" class="score">find :<span class="score" id="display"> 0</span></div>
+	</div>
+	
+	<div id="tableau">
+		<table>
+			<tr>
+				<td class="case">
+					<div class="content">ザ</div>
+				</td>
+				<td class="case">
+					<div class="content">ジ</div>
+				</td>
+			</tr>
+			<tr>
+				<td class="case">
+					<div class="content">ズ</div>
+				</td>
+				<td class="case">
+					<div class="content">ゼ</div>
+				</td>
+			</tr>
+			<tr>
+				<td class="case">
+					<div class="content">ズ</div>
+				</td>
+				<td class="case">
+					<div class="content">ゼ</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+	
+	<div id="result">
+		<div id="resultscreen"></div>
+		<div id="resultmove">
+			<span class="score" id="resultanim"></span>
+			<span class="score" id="resultextfun"></span>
+		</div>
+		
+	</div>
+</div>
+
+</body>
+
+<script type="text/javascript">
+// On lance le random au chargement de la page
+window.onload = function ()
+{
+	table1=aKatakana;
+	table2=aHiraganaRomaji;
+    fSwitch(table1,table2);
+};
+
+//******** Debut de Declaration des variables *********//
+var aHiraganaRomaji = new Array ("a", "i", "u", "e", "o",
+					"ka","ki","ku","ke","ko",
+					"sa","shi","su","se","so",
+					"ta","chi","tsu","te","to",
+					"na","ni","nu","ne","no",
+					"ha","hi","fu","he","ho", 
+					"ma","mi","mu","me","mo",
+					"ya","yu","yo",
+					"ra","ri","ru","re","ro",
+					"wa","wi","we","wo",
+					"n", 
+					"ga","gi","gu","ge","go",
+					"za","ji","zu","ze","zo",
+					"da","dji","dzu","de","do",
+					"ba","bi","bu","be","bo",
+					"pa","pi","pu","pe","po");
+													
+var aHiragana = new Array ("あ","い","う","え","お", 
+					"か","き","く","け","こ", 
+					"さ","し","す","せ","そ", 
+					"た","ち","つ","て","と", 
+					"な","に","ぬ","ね","の", 
+					"は","ひ","ふ","へ","ほ",
+					"ま","み","む","め","も", 
+					"や",    "ゆ",    "よ", 
+					"ら","り","る","れ","ろ", 
+					"わ","ゐ",    "ゑ","を", 
+							 "ん",
+					"が","ぎ","ぐ","げ","ご", 
+					"ざ","じ","ず","ぜ","ぞ", 
+					"だ","ぢ","づ","で","ど", 
+					"ば","び","ぶ","べ","ぼ", 
+					"ぱ","ぴ","ぷ","ぺ","ぽ");
+					
+var aKatakana = new Array ("ア","イ","ウ","エ","オ", 
+					"カ","キ","ク","ケ","コ",
+					"サ","シ","ス","セ","ソ",
+					"タ","チ","ツ","テ","ト", 
+					"ナ","ニ","ヌ","ネ","ノ", 
+					"ハ","ヒ","フ","ヘ","ホ", 
+					"マ","ミ","ム","メ","モ", 
+					"ヤ",    "ユ",    "ヨ", 
+					"ラ","リ","ル","レ","ロ", 
+					"ワ","ヰ",    "ヱ","ヲ", 
+					         "ン", 
+					"ガ","ギ","グ","ゲ","ゴ", 
+					"ザ","ジ","ズ","ゼ","ゾ", 
+					"ダ","ヂ","ヅ","デ","ド", 
+					"バ","ビ","ブ","ベ","ボ", 
+					"パ","ピ","プ","ペ","ポ"); 
+
+var WhatSelect;
+var btntype=document.getElementById('tableau');
+var table1;
+var table2;
+var soundstate=true;
+
+//******** Fin de Declaration des variables *********//
+document.getElementById('katatoroma').onclick = function()
+    {
+        table2=aKatakana;
+		table1=aHiraganaRomaji;
+		fSwitch(table1,table2);
+    }
+	
+document.getElementById('hiratoroma').onclick = function()
+{
+		table2=aHiragana;
+		table1=aHiraganaRomaji;
+		fSwitch(table1,table2);
+}
+
+document.getElementById('hiratokata').onclick = function()
+{
+		table2=aHiragana;
+		table1=aKatakana;
+		fSwitch(table1,table2);
+}
+
+document.getElementById('icomenusound').onclick = function()
+{
+	if (soundstate) 
+	{
+	soundstate=false;
+	document.getElementById('icosound').style.backgroundPosition="-45px 0px";
+	}
+	else 
+	{soundstate=true;
+	document.getElementById('icosound').style.backgroundPosition="0px 0px";
+	}
+}
+
+///////////////// function to Play sound ////////////////////////
+function PlaySound(path) {
+  var audioElement = document.createElement('audio');
+  audioElement.setAttribute('src', path);
+  audioElement.play();
+}
+
+///////////////// function to Detect what element has been click ////////////////////////
+function whatClicked(evt) {
+	//var target = evt.target || evt.srcElement;//for ie8
+	var sNameClass=evt.target.className;
+	var sValue=evt.target.value;
+        
+        if (sNameClass==="case" || sNameClass==="content") 
+        {
+			var	sVal;
+			if (sNameClass==="case") 
+			{
+				sVal=evt.target.childNodes[1].firstChild.textContent;	
+			}
+			else 
+			{
+				sVal=evt.target.textContent;
+				var sGood=document.getElementById('display').textContent;
+			}
+		
+			if (sVal===WhatSelect)
+			{
+			//document.getElementById('resultext').innerHTML= 'WIN !';
+			document.getElementById('resultextfun').style.backgroundPosition="0px 0px";
+			document.getElementById('result').style.display='block';
+			if (soundstate) {PlaySound('asset/smb_coin.wav');}//'/labs/smb_coin.wav' path relativ for website
+			move(document.getElementById('resultextfun'));
+			setTimeout(function(){fSwitch(table1,table2);document.getElementById('result').style.display='none';},1000);
+			}
+			else 
+			{
+			//document.getElementById('resultext').innerHTML= 'LOSE!'; 0px -80px
+			document.getElementById('resultextfun').style.backgroundPosition="0px -80px";
+			document.getElementById('result').style.display='block';
+			if (soundstate) {PlaySound('asset/smb_stomp.wav');}
+			setTimeout(function(){document.getElementById('result').style.display='none';},500);
+			}
+        }
+        else
+        {
+            return false;
+        }
+}
+
+var clickall='click'||'touchstart';//for mobile
+btntype.addEventListener(clickall, whatClicked, false);
+//btntype.addEventListener("touchstart", whatClicked, true);
+
+///////////////// function to Game ////////////////////////
+function fSwitch(table1,table2) { 
+	var aNbreClass = document.getElementsByClassName('content');
+	var M=0;//valeur min
+	var N=((aHiragana.length)-1);//valeur max
+	var O=((aNbreClass.length)-1);//valeur max de content
+	//on creer un tableau contenant les numeros de kanji
+	var aNumKanji = new Array ();
+		
+	for(var i = 0; i < aNbreClass.length; i++)//on place dans la grille le tableau voulu
+	{
+		iSelect= Math.floor(M + (1+N-M)*Math.random());
+		var tKatakana=table1[iSelect];//pour changer le tableau : aHiraganaRomaji ,aHiragana, aKatakana
+		aNumKanji.push(iSelect);
+		
+		//do something to each div like
+		var sReplaceA=aNbreClass[i].textContent;
+		aNbreClass[i].innerHTML = tKatakana;
+		//document.getElementById('display').innerHTML=" "+tKatakanaRomaji;
+	}
+	
+	//On selectionne un chiffre parmis le total de la grille
+	iReSelect= Math.floor(M + (1+O-M)*Math.random());
+	var checkContent = document.getElementsByClassName('content');
+	WhatSelect=checkContent[iReSelect].textContent;
+	
+	var num=aNumKanji[iReSelect];
+	var tKatakanaRomaji=table2[num];//on indique l'indice a partir du tableau voulu
+	
+	document.getElementById('display').innerHTML=" "+tKatakanaRomaji;
+}
+	
+//left:18%;
+//top:40%;
+//opacity:1;
+
+///////////////// function to Animate ////////////////////////
+function move(elem) {
+
+	  var iOpa=1;
+	  var iTop=1;
+	 
+	  function frame() {
+	     
+	    iOpa++ // update parameters
+		iTop++
+	     
+	    elem.style.opacity = (iOpa/10); // show frame
+		elem.style.top = 30+iTop+'%';
+	 
+	    if (iOpa === 10 && iTop === 10)  // check finish condition	
+	      clearInterval(id)	  
+	  } 
+	  var id = setInterval(frame, 15) // draw every 10ms	  
+}
+
+document.getElementById('subhexa01').onclick=function (){
+	fSwitch(table1,table2);
+	}
+//////// fonction pour mobile ///////////
+/*if( !/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+ // some code..
+document.getElementById('result').innerHTML="not a mobile";
+
+	document.getElementById('subhexa01').onclick=function (){
+	//move(document.getElementById('subhexa01'));
+	//document.getElementById('subhexa01').style.transform='scale (1,1)';
+	//random();
+	fSwitch();
+	}
+	
+	//document.getElementById('cube3dface1').onclick=function (){
+	//move(document.getElementById('subhexa01'));
+	//document.getElementById('subhexa01').style.transform='scale (1,1)';
+	//thegame();
+	//}
+}
+else
+{
+	document.getElementById('result').innerHTML="this a mobile";
+	//pour empecher le scroll
+	document.body.addEventListener('touchmove', function(event) {
+	event.preventDefault();
+	}, false);
+
+	window.addEventListener('load', function(){ // on page load
+
+		document.getElementById('subhexa01').addEventListener('touchstart', function(e){
+		  //alert(e.changedTouches[0].pageX) // alert pageX coordinate of touch point
+		move(document.getElementById('subhexa01'));
+		thegame();
+
+		
+		 }, false)
+		 
+		 document.getElementById('cube3dface1').addEventListener('touchstart', function(e){
+		  //alert(e.changedTouches[0].pageX) // alert pageX coordinate of touch point
+		thegame();
+		 }, false)
+		 
+		  document.getElementById('cube3dface2').addEventListener('touchstart', function(e){
+		  //alert(e.changedTouches[0].pageX) // alert pageX coordinate of touch point
+		thegame();
+		 }, false)
+	 
+	}, false)
+}*/
+/*
+document.getElementById('hexa01').addEventListener('touchend',function(event){
+var iScore=document.getElementById('display').textContent;
+var	iScore=parseInt(iScore,10);
+
+		iScore=iScore+1;
+		document.getElementById('display').innerHTML=" "+iScore;
+
+		if(iScore===5){
+		document.getElementById('subhexa01').className='shapehexacolor01';
+		}
+
+		if(iScore===10){
+		document.getElementById('subhexa01').className='shapehexacolor02';
+		}
+
+		if(iScore===20){
+		document.getElementById('subhexa01').className='shapehexacolor03';
+		document.getElementById('win').style.display='block';
+		}
+}*/
+</script>
+</html>
